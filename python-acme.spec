@@ -8,7 +8,7 @@
 
 Name:           python-acme
 Version:        0.18.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python library for the ACME protocol
 License:        ASL 2.0
 URL:            https://pypi.python.org/pypi/acme
@@ -16,9 +16,7 @@ Source0:        https://files.pythonhosted.org/packages/source/a/%{srcname}/%{sr
 
 # When running tests argparse is not recognised as provided by core
 
-%if 0%{?rhel}
 Patch0:         epel7-setup.patch
-%endif
 
 BuildRequires:  python2-devel
 BuildRequires:  python-sphinx
@@ -117,7 +115,10 @@ Documentation for the ACME python libraries
 %endif
 
 %prep
-%autosetup -p1 -n %{srcname}-%{version}
+%setup -q -n %{srcname}-%{version}
+%if 0%{?rhel}
+%patch0 -p1
+%endif
 
 
 %build
@@ -194,6 +195,9 @@ grep -q %{__python3} %{buildroot}%{_bindir}/jws-3
 %endif
 
 %changelog
+* Tue Sep 19 2017 Matt Dainty <matt@bodgit-n-scarper.com> - 0.18.1-3
+- Fix EPEL7 builds to work on Copr
+
 * Mon Sep 18 2017 Eli Young <elyscape@gmail.com> - 0.18.1-2
 - Disable doc package entirely for EPEL7
 
